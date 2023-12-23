@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+struct Todo: Identifiable {
+    let id = UUID()
+    let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+
 struct ContentView: View {
     @State var start = true
     
@@ -48,7 +57,7 @@ struct StartView: View {
 struct MenuView: View {
     @Binding var start: Bool
     @State var todos: [String] = ["Eat lunch", "Write code", "Write my essay about war time Cold war shit"]
-    @State var testToDo: [String] = UserDefaults.standard.array(forKey: "mytodos") as? [String] ?? []
+    @State var testToDo: [String: String] = UserDefaults.standard.object(forKey: "mytodos") as? [String: String] ?? [:]
     @State var input = ""
     var body: some View {
         VStack (alignment: .leading) {
@@ -66,11 +75,11 @@ struct MenuView: View {
                 TextField("Add here...", text: $input).padding()
                 Button("Add") {
                     if !self.input.isEmpty {
-                        //self.todos += testToDo
-                        self.testToDo.append(self.input)
+                        let todo = Todo(name: self.input)
+                        self.testToDo[todo.id.uuidString] = todo.name
                         UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
                         self.input = ""
-                        self.testToDo = UserDefaults.standard.array(forKey: "mytodos") as? [String] ?? []
+                        self.testToDo = UserDefaults.standard.object(forKey: "mytodos") as? [String:String] ?? [:]
                     }
                 }
                 .padding()
@@ -83,13 +92,15 @@ struct MenuView: View {
             // Todo stack
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(self.testToDo, id: \.self) { item in
+                    ForEach(Array(self.testToDo.keys), id: \.self) { key in
                         HStack {
-                            Text(item.capitalized)
+                            Text(self.testToDo[key]!.capitalized)
                                 
                             Spacer()
+                            // Remove button
                             Button {
-                                self.testToDo = self.testToDo.filter({$0 != item})
+                                //= self.testToDo.filter({$0.id != item.id})
+                                self.testToDo.removeValue(forKey: key)
                                 UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
                             } label: {
                                 Image(systemName: "xmark.circle.fill")
