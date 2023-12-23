@@ -29,10 +29,16 @@ struct StartView: View {
             Color(.orange).ignoresSafeArea()
             VStack {
                 Spacer()
-                Text("OnTrack").font(.largeTitle).bold().padding()
+                Text("OnTrack")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding()
                 Button("Start") {
                     self.start = true
-                }.foregroundColor(.black).font(.title2)
+                }
+                .foregroundColor(.black)
+                .font(.title2)
+                .fontWeight(.semibold)
                 Spacer()
             }
         }
@@ -41,7 +47,8 @@ struct StartView: View {
 
 struct MenuView: View {
     @Binding var start: Bool
-    @State var todos: [String] = ["Eat lunch", "Write code"]
+    @State var todos: [String] = ["Eat lunch", "Write code", "Write my essay about war time Cold war shit"]
+    @State var testToDo: [String] = UserDefaults.standard.array(forKey: "mytodos") as? [String] ?? []
     @State var input = ""
     var body: some View {
         VStack (alignment: .leading) {
@@ -59,8 +66,11 @@ struct MenuView: View {
                 TextField("Add here...", text: $input).padding()
                 Button("Add") {
                     if !self.input.isEmpty {
-                        self.todos.append(self.input)
+                        //self.todos += testToDo
+                        self.testToDo.append(self.input)
+                        UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
                         self.input = ""
+                        self.testToDo = UserDefaults.standard.array(forKey: "mytodos") as? [String] ?? []
                     }
                 }
                 .padding()
@@ -71,23 +81,37 @@ struct MenuView: View {
             }
             
             // Todo stack
-            VStack(alignment: .leading) {
-                ForEach(self.todos, id: \.self) { item in
-                    Text(item.capitalized)
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(self.testToDo, id: \.self) { item in
+                        HStack {
+                            Text(item.capitalized)
+                                
+                            Spacer()
+                            Button {
+                                self.testToDo = self.testToDo.filter({$0 != item})
+                                UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                            }
+                            
+                            
+                        }
                         .padding()
-                        .bold()
-                        .foregroundColor(.black)
-                        .background(Color.secondaryBg)
-                        .cornerRadius(15.0)
+                            .bold()
+                            .foregroundColor(.black)
+                            .background(Color.secondaryBg)
+                            .cornerRadius(15.0)
+                    }
                 }
+                .frame(
+                    minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding()
             }
-            .frame(
-                minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,
-                maxWidth: .infinity,
-                alignment: .leading
-            )
             
-            .padding()
             
             Spacer()
         }.padding()
