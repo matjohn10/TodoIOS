@@ -44,7 +44,7 @@ struct MenuView: View {
     @State var todos: [String] = ["Eat lunch", "Write code"]
     @State var input = ""
     var body: some View {
-        VStack {
+        VStack (alignment: .leading) {
             HStack {
                 Spacer()
                 Text("Your List").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding()
@@ -62,17 +62,35 @@ struct MenuView: View {
                         self.todos.append(self.input)
                         self.input = ""
                     }
-                }.padding().foregroundColor(.black)
+                }
+                .padding()
+                .foregroundColor(.black)
+                .fontWeight(.semibold)
+                .background(Color.orange)
+                .cornerRadius(10.0)
             }
-            VStack(alignment: .trailing) {
+            
+            // Todo stack
+            VStack(alignment: .leading) {
                 ForEach(self.todos, id: \.self) { item in
                     Text(item.capitalized)
                         .padding()
                         .bold()
+                        .foregroundColor(.black)
+                        .background(Color.secondaryBg)
+                        .cornerRadius(15.0)
                 }
-            }.padding()
+            }
+            .frame(
+                minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/,
+                maxWidth: .infinity,
+                alignment: .leading
+            )
+            
+            .padding()
+            
             Spacer()
-        }
+        }.padding()
     }
     
 }
