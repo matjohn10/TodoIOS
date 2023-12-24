@@ -16,6 +16,7 @@
 		2F53C2762B3691710096E00E /* todo_appUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F53C2752B3691710096E00E /* todo_appUITestsLaunchTests.swift */; };
 		2FB6E1042B37F351001B33A3 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB6E1032B37F351001B33A3 /* DataController.swift */; };
 		2FB6E1072B37F4FC001B33A3 /* TodoModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2FB6E1052B37F4FC001B33A3 /* TodoModel.xcdatamodeld */; };
+		2FB6E10A2B37FA76001B33A3 /* ContentViewBad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB6E1092B37FA76001B33A3 /* ContentViewBad.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		2F53C2752B3691710096E00E /* todo_appUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = todo_appUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2FB6E1032B37F351001B33A3 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		2FB6E1062B37F4FC001B33A3 /* TodoModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TodoModel.xcdatamodel; sourceTree = "<group>"; };
+		2FB6E1092B37FA76001B33A3 /* ContentViewBad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewBad.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				2F53C25A2B36916F0096E00E /* ContentView.swift */,
+				2FB6E1092B37FA76001B33A3 /* ContentViewBad.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 			files = (
 				2F53C25B2B36916F0096E00E /* ContentView.swift in Sources */,
 				2FB6E1072B37F4FC001B33A3 /* TodoModel.xcdatamodeld in Sources */,
+				2FB6E10A2B37FA76001B33A3 /* ContentViewBad.swift in Sources */,
 				2FB6E1042B37F351001B33A3 /* DataController.swift in Sources */,
 				2F53C2592B36916F0096E00E /* todo_appApp.swift in Sources */,
 			);
