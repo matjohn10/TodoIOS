@@ -3,6 +3,7 @@
     <entity name="Todo" representedClassName="Todo" syncable="YES" codeGenerationType="class">
         <attribute name="content" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="date" optional="YES" attributeType="Date" defaultDateTimeInterval="725087520" usesScalarValueType="NO"/>
+        <attribute name="due_date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
     </entity>
