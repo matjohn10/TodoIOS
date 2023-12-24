@@ -59,10 +59,40 @@ struct StartView: View {
     }
 }
 
+struct ConfirmView: View {
+    @Binding var openPopover: Bool
+    @Binding var keyToDelete: String
+    @Binding var todos: [String: [String]]
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("Confirm completion")
+                            .font(.largeTitle)
+                            .padding()
+            Text("The task will be deleted if you click confirm.")
+            Spacer()
+            HStack {
+                Button("Cancel") {
+                    openPopover = false
+                }
+                Button("Delete") {
+                    todos.removeValue(forKey: keyToDelete)
+                    UserDefaults.standard.set(todos, forKey: "mytodos")
+                    keyToDelete = ""
+                    openPopover = false
+                }
+            }
+            Spacer()
+        }
+    }
+}
+
 struct MenuView: View {
     @Binding var start: Bool
-    @State private var confirmDelete: Bool = false
+    // Delete states
     @State private var keyToDelete: String = ""
+    @State private var confirmDone: Bool = false
+    
     @State var testToDo: [String: [String]] = UserDefaults.standard.object(forKey: "mytodos") as? [String: [String]] ?? [:]
     @State var input = ""
     var body: some View {
@@ -72,10 +102,10 @@ struct MenuView: View {
             HStack {
                 Spacer()
                 Text("Your List").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding()
-                Spacer()
-                Button("Back") {
-                    self.start = false
-                }
+                //Spacer()
+//                Button("Back") {
+//                    self.start = false
+//                }
                 Spacer()
             }
             
@@ -120,9 +150,8 @@ struct MenuView: View {
                             Spacer()
                             // Done button
                             Button (action: {
-                                confirmDelete = true
                                 keyToDelete = key
-
+                                confirmDone = true
                             }) {
                                 Image(systemName: "checkmark.circle")
                             }
@@ -143,29 +172,11 @@ struct MenuView: View {
                     alignment: .leading
                 )
                 .padding()
-                .popover(isPresented: $confirmDelete) {
-                    VStack {
-                        Spacer()
-                        Text("Confirm completion")
-                                        .font(.largeTitle)
-                                        .padding()
-                        Text("The task will be deleted if you click confirm.")
-                        Spacer()
-                        HStack {
-                            Button("Cancel") {
-                                confirmDelete = false
-                            }
-                            Button("Delete") {
-                                self.testToDo.removeValue(forKey: keyToDelete)
-                                UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
-                                keyToDelete = ""
-                                confirmDelete = false
-                            }
-                        }
-                        Spacer()
-                    }
-                    
+                .popover(isPresented: $confirmDone) {
+                    ConfirmView(openPopover: $confirmDone, keyToDelete: $keyToDelete, todos: $testToDo)
                 }
+                
+                
             }
             
             
