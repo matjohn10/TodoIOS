@@ -61,6 +61,8 @@ struct StartView: View {
 
 struct MenuView: View {
     @Binding var start: Bool
+    @State private var confirmDelete: Bool = false
+    @State private var keyToDelete: String = ""
     @State var testToDo: [String: [String]] = UserDefaults.standard.object(forKey: "mytodos") as? [String: [String]] ?? [:]
     @State var input = ""
     var body: some View {
@@ -117,12 +119,14 @@ struct MenuView: View {
                                 
                             Spacer()
                             // Done button
-                            Button {
-                                self.testToDo.removeValue(forKey: key)
-                                UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
-                            } label: {
+                            Button (action: {
+                                confirmDelete = true
+                                keyToDelete = key
+
+                            }) {
                                 Image(systemName: "checkmark.circle")
                             }
+                            
                             
                             
                         }
@@ -139,6 +143,29 @@ struct MenuView: View {
                     alignment: .leading
                 )
                 .padding()
+                .popover(isPresented: $confirmDelete) {
+                    VStack {
+                        Spacer()
+                        Text("Confirm completion")
+                                        .font(.largeTitle)
+                                        .padding()
+                        Text("The task will be deleted if you click confirm.")
+                        Spacer()
+                        HStack {
+                            Button("Cancel") {
+                                confirmDelete = false
+                            }
+                            Button("Delete") {
+                                self.testToDo.removeValue(forKey: keyToDelete)
+                                UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
+                                keyToDelete = ""
+                                confirmDelete = false
+                            }
+                        }
+                        Spacer()
+                    }
+                    
+                }
             }
             
             
