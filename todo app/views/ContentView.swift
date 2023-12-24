@@ -10,7 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjContext
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.date, order: .reverse)]) var todos: FetchedResults<Todo>
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.due_date, order: .forward)]) var todos: FetchedResults<Todo>
     
     @State var addViewShow: Bool = false
     
@@ -29,7 +29,7 @@ struct ContentView: View {
                 
                 List {
                     ForEach(todos) { todo in
-                        NavigationLink(destination: Text(todo.title!)) {
+                        NavigationLink(destination: EditTodoView(todo: todo)) {
                             HStack {
                                 VStack (alignment: .leading, spacing: 4.0) {
                                     Text(todo.title!).bold()
@@ -45,6 +45,7 @@ struct ContentView: View {
                         .cornerRadius(15.0)
                     }
                     .onDelete(perform: deleteTodo)
+                    
                 }
                 .listStyle(.plain)
             }
@@ -70,11 +71,20 @@ struct ContentView: View {
     }
     
     private func deleteTodo(offsets: IndexSet) {
-        //pass
+        withAnimation {
+            offsets.map { todos[$0] }.forEach(managedObjContext.delete)
+            DataController().save(context: managedObjContext)
+        }
     }
     
     private func tasksDueToday() -> Int {
-        return 0
+        var count = 0
+        for todo in todos {
+            if Calendar.current.isDateInToday(todo.due_date!) {
+                count += 1
+            }
+        }
+        return count
     }
 }
 
