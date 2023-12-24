@@ -7,12 +7,15 @@
 
 import SwiftUI
 
-struct Todo: Identifiable {
-    let id = UUID()
+struct Todo: Codable {
+    let id: UUID
     let name: String
+    let date: Date
     
     init(name: String) {
         self.name = name
+        self.id = UUID()
+        self.date = Date()
     }
 }
 
@@ -33,7 +36,9 @@ struct ContentView: View {
 struct StartView: View {
     @Binding var start: Bool
     
+    
     var body: some View {
+        
         ZStack {
             Color(.orange).ignoresSafeArea()
             VStack {
@@ -56,11 +61,12 @@ struct StartView: View {
 
 struct MenuView: View {
     @Binding var start: Bool
-    @State var todos: [String] = ["Eat lunch", "Write code", "Write my essay about war time Cold war shit"]
-    @State var testToDo: [String: String] = UserDefaults.standard.object(forKey: "mytodos") as? [String: String] ?? [:]
+    @State var testToDo: [String: [String]] = UserDefaults.standard.object(forKey: "mytodos") as? [String: [String]] ?? [:]
     @State var input = ""
     var body: some View {
+        
         VStack (alignment: .leading) {
+            
             HStack {
                 Spacer()
                 Text("Your List").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding()
@@ -72,14 +78,16 @@ struct MenuView: View {
             }
             
             HStack {
+                // Add todo
                 TextField("Add here...", text: $input).padding()
                 Button("Add") {
                     if !self.input.isEmpty {
                         let todo = Todo(name: self.input)
-                        self.testToDo[todo.id.uuidString] = todo.name
+                        self.testToDo[todo.id.uuidString] = [todo.name, todo.date.ISO8601Format()]
+                        
                         UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
                         self.input = ""
-                        self.testToDo = UserDefaults.standard.object(forKey: "mytodos") as? [String:String] ?? [:]
+                        self.testToDo = UserDefaults.standard.object(forKey: "mytodos") as? [String:[String]] ?? [:]
                     }
                 }
                 .padding()
@@ -91,19 +99,29 @@ struct MenuView: View {
             
             // Todo stack
             ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(Array(self.testToDo.keys), id: \.self) { key in
+                LazyVStack(alignment: .leading) {
+                    // Placeholder if todos empty
+                    if self.testToDo.isEmpty {
                         HStack {
-                            Text(self.testToDo[key]!.capitalized)
+                            Spacer()
+                            Text("No tasks yet...")
+                            Spacer()
+                        }
+                        
+                    }
+                    
+                    ForEach(Array(self.testToDo).sorted(by: {$0.1[1] < $1.1[1]}).map{(k, v) in return k}, id: \.self) {
+                        key in
+                        HStack {
+                            Text(self.testToDo[key]![0].capitalized)
                                 
                             Spacer()
-                            // Remove button
+                            // Done button
                             Button {
-                                //= self.testToDo.filter({$0.id != item.id})
                                 self.testToDo.removeValue(forKey: key)
                                 UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
                             } label: {
-                                Image(systemName: "xmark.circle.fill")
+                                Image(systemName: "checkmark.circle")
                             }
                             
                             
@@ -127,6 +145,8 @@ struct MenuView: View {
             Spacer()
         }.padding()
     }
+    
+    
     
 }
 
