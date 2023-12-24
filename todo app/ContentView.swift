@@ -110,7 +110,7 @@ struct MenuView: View {
                         
                     }
                     
-                    ForEach(Array(self.testToDo).sorted(by: {$0.1[1] < $1.1[1]}).map{(k, v) in return k}, id: \.self) {
+                    ForEach(orderTodos(), id: \.self) {
                         key in
                         HStack {
                             Text(self.testToDo[key]![0].capitalized)
@@ -144,6 +144,11 @@ struct MenuView: View {
             
             Spacer()
         }.padding()
+    }
+    
+    func orderTodos() -> [String] {
+        // Returns the keys of the todo dict in order of the date they were added
+        return Array(self.testToDo).sorted(by: {$0.1[1] > $1.1[1]}).map{(k, v) in return k}
     }
     
     
