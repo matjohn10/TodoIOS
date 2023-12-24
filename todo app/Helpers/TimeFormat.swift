@@ -23,6 +23,9 @@ func TimeFormat(date: Date) -> String {
         dateFormatter.dateFormat = "HH:mm"
         dateString = date.formatted(Date.FormatStyle().weekday(.abbreviated)) + " at " + dateFormatter.string(from: date)
     }
+    else if minutes < 0  {
+        dateString = "Overdue!"
+    }
     else {
         dateFormatter.dateFormat = "HH:mm"
         dateString = "Today at " + dateFormatter.string(from: date)

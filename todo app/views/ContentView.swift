@@ -45,18 +45,42 @@ struct ContentView: View {
                         .cornerRadius(15.0)
                     }
                     .onDelete(perform: deleteTodo)
-                    
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button {
+                            // TODO: Add to done tasks
+                            print("complete")
+                        } label: {
+                            Label("Complete", systemImage: "checkmark.circle")
+                        }
+                        .tint(.green)
+                    }
                 }
                 .listStyle(.plain)
             }
             .navigationTitle("OnTrack")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        addViewShow.toggle()
+                    
+                    Menu {
+                        Button {
+                            addViewShow.toggle()
+                        } label: {
+                            Label("Add Task", systemImage: "plus.circle")
+                        }
+                        Button {
+                            print("New List editor")
+                        } label: {
+                            Label("Create new list", systemImage: "older.badge.plus")
+                        }
+                        Button {
+                            print("Edit Page")
+                        } label: {
+                            Label("Edit", systemImage: "slider.horizontal.2.square")
+                        }
                     } label: {
-                        Image(systemName: "plus.circle").foregroundColor(.orange)
+                        Label("Menu", systemImage: "ellipsis.circle")
                     }
+                    .tint(.orange)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton().foregroundColor(.orange)
