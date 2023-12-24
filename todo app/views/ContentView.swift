@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Todo: Codable {
+struct Todos: Codable {
     let id: UUID
     let name: String
     let date: Date
@@ -20,7 +20,7 @@ struct Todo: Codable {
 }
 
 struct ContentView: View {
-    @State var start = true
+    @State var start = false
     
     var body: some View {
         return Group {
@@ -114,7 +114,7 @@ struct MenuView: View {
                 TextField("Add here...", text: $input).padding()
                 Button("Add") {
                     if !self.input.isEmpty {
-                        let todo = Todo(name: self.input)
+                        let todo = Todos(name: self.input)
                         self.testToDo[todo.id.uuidString] = [todo.name, todo.date.ISO8601Format()]
                         
                         UserDefaults.standard.set(self.testToDo, forKey: "mytodos")
