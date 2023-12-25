@@ -12,7 +12,7 @@ struct EditTodoView: View {
     @Environment(\.managedObjectContext) var managedObjContext
     @Environment(\.dismiss) var dismiss
     
-    var todo: FetchedResults<Todo>.Element
+    var todo: FetchedResults<Todos>.Element
     @State var title = ""
     @State var content = ""
     @State var dueDate: Date = Date()

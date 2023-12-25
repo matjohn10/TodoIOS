@@ -26,9 +26,13 @@ func TimeFormat(date: Date) -> String {
     else if minutes < 0  {
         dateString = "Overdue!"
     }
-    else {
+    else if Calendar.current.isDateInToday(date){
         dateFormatter.dateFormat = "HH:mm"
         dateString = "Today at " + dateFormatter.string(from: date)
+    }
+    else {
+        dateFormatter.dateFormat = "HH:mm"
+        dateString = "Tmr at " + dateFormatter.string(from: date)
     }
     
     

@@ -27,18 +27,19 @@ class DataController: ObservableObject {
         }
     }
     
-    func addTodo(title: String, content: String, due: Date, context: NSManagedObjectContext) {
-        let todo = Todo(context: context)
+    func addTodo(title: String, content: String, due: Date, list: Int32 = 0, context: NSManagedObjectContext) {
+        let todo = Todos(context: context)
         todo.id = UUID()
         todo.title = title
         todo.content = content
         todo.date = Date()
+        todo.list_id = list
         todo.due_date = due
         
         save(context: context)
     }
     
-    func editTodo(todo: Todo, title: String, content: String, due: Date, context: NSManagedObjectContext) {
+    func editTodo(todo: Todos, title: String, content: String, due: Date, context: NSManagedObjectContext) {
         todo.date = Date()
         todo.title = title
         todo.content = content

@@ -10,9 +10,13 @@ import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var managedObjContext
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.due_date, order: .forward)]) var todos: FetchedResults<Todo>
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.due_date, order: .forward)]) var todos: FetchedResults<Todos>
     
     @State var addViewShow: Bool = false
+    @State var changeListShow: Bool = false
+    
+    @State var todoList: Int32 = 0
+    @State var todolistName: String = "OnTrack"
     
     var body: some View {
         NavigationView {
@@ -54,10 +58,10 @@ struct ContentView: View {
                         }
                         .tint(.green)
                     }
-                }
-                .listStyle(.plain)
+                }.listStyle(PlainListStyle())
+
             }
-            .navigationTitle("OnTrack")
+            .navigationTitle(todolistName)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     
@@ -68,9 +72,9 @@ struct ContentView: View {
                             Label("Add Task", systemImage: "plus.circle")
                         }
                         Button {
-                            print("New List editor")
+                            changeListShow.toggle()
                         } label: {
-                            Label("Create new list", systemImage: "older.badge.plus")
+                            Label("Change List", systemImage: "square.stack")
                         }
                         Button {
                             print("Edit Page")
@@ -88,6 +92,9 @@ struct ContentView: View {
             }
             .sheet(isPresented: $addViewShow) {
                 AddTodoView()
+            }
+            .sheet(isPresented: $changeListShow) {
+                ListView(todoList: $todoList, todolistName: $todolistName)
             }
         }
         .navigationViewStyle(.stack)
